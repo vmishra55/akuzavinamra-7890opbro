@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>₹10 UPI BOOSTER Verification</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 2rem;
+    }
+    input, button {
+      padding: 0.6rem;
+      font-size: 1rem;
+      margin: 0.5rem;
+      width: 300px;
+    }
+    #response {
+      margin-top: 1.5rem;
+      font-weight: bold;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h2>Check UPI ID</h2>
+  <input type="text" id="upiInput" placeholder="example@upi">
+  <br>
+  <button onclick="₹10 UPI BOOSTER()">BOOST</button>
+  <div id="response"></div>
+
+  <script>
+    function sanitizeResponse(text) {
+      // Remove links
+      text = text.replace(/https?:\/\/\S+/gi, '');
+      // Remove Telegram, Instagram, Discord handles/usernames
+      text = text.replace(/@\w+/gi, '');
+      text = text.replace(/instagram\.com\/\w+/gi, '');
+      text = text.replace(/\w+#\d{4}/gi, '');
+      // Remove any email/UPI formats
+      text = text.replace(/\b\S+@\S+\b/g, '');
+      return text.trim();
+    }
+
+    async function checkUPI() {
+      const upi = document.getElementById('upiInput').value.trim();
+      const responseDiv = document.getElementById('response');
+
+      if (!upi || !upi.includes('@')) {
+        responseDiv.textContent = "Please enter a valid UPI ID.";
+        return;
+      }
+
+      responseDiv.textContent = "Processing...";
+
+      try {
+        const res = await fetch(`https://r4u.in/ask/?upi=${encodeURIComponent(upi)}`);
+        let data = await res.text();
+        data = sanitizeResponse(data);
+
+        if (!data) {
+          responseDiv.textContent = "No public information found.";
+        } else {
+          responseDiv.textContent = "Response received:\n" + data;
+        }
+      } catch (err) {
+        responseDiv.textContent = "An error occurred. Please try again later.";
+      }
+    }
+  </script>
+</body>
+</html>
